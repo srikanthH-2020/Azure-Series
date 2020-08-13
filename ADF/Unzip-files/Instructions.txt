@@ -1,0 +1,5 @@
+Please use the JSON files for createing the pipeline or Just the required activity.
+If you want to create the pipline manually from these JSON files, Just follow the below sequence.
+1) Create Linked Service => Please add your account keys, Key vault while creating this linked service.
+2) Create Data Sets
+3) Create Pipeline
