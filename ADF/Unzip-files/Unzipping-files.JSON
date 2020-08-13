@@ -1,0 +1,109 @@
+{
+    "name": "Unzipping-files",
+    "properties": {
+        "activities": [
+            {
+                "name": "Copy_Zip_Files",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "BinarySource",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageReadSettings",
+                            "recursive": true,
+                            "wildcardFolderPath": "folder1",
+                            "wildcardFileName": {
+                                "value": "@pipeline().parameters.wildCardCharacter",
+                                "type": "Expression"
+                            },
+                            "deleteFilesAfterCompletion": false
+                        },
+                        "formatSettings": {
+                            "type": "BinaryReadSettings",
+                            "compressionProperties": {
+                                "type": "ZipDeflateReadSettings",
+                                "preserveZipFileNameAsFolder": false
+                            }
+                        }
+                    },
+                    "sink": {
+                        "type": "BinarySink",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageWriteSettings"
+                        }
+                    },
+                    "enableStaging": false
+                },
+                "inputs": [
+                    {
+                        "referenceName": "Binary1",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "Binary2",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "Delete_Zip_Files",
+                "type": "Delete",
+                "dependsOn": [
+                    {
+                        "activity": "Copy_Zip_Files",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "dataset": {
+                        "referenceName": "Binary1",
+                        "type": "DatasetReference"
+                    },
+                    "logStorageSettings": {
+                        "linkedServiceName": {
+                            "referenceName": "BLOB_STORAGE",
+                            "type": "LinkedServiceReference"
+                        },
+                        "path": "samson"
+                    },
+                    "enableLogging": true,
+                    "storeSettings": {
+                        "type": "AzureBlobStorageReadSettings",
+                        "recursive": true,
+                        "wildcardFileName": {
+                            "value": "@{pipeline().parameters.wildCardCharacter}",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "wildCardCharacter": {
+                "type": "string"
+            }
+        },
+        "annotations": []
+    }
+}

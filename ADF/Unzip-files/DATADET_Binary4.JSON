@@ -1,0 +1,19 @@
+{
+    "name": "Binary4",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "BLOB_STORAGE",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "Binary",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "fileName": "new_data.zip",
+                "folderPath": "folder1",
+                "container": "config"
+            }
+        }
+    }
+}
